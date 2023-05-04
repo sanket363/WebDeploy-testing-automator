@@ -5,13 +5,13 @@ pipeline {
         stage('Build') {
             steps {
                 // Pull the Todo app image
-                sh 'docker pull snaket2628/todo:latest'
+                sh 'docker pull snaket2628/node1-app:latest'
             }
         }
         stage('Stop Previous Container') {
             steps {
                 script {
-                    def containerID = sh(script: "docker ps -q --filter ancestor=snaket2628/todo:latest", returnStdout: true).trim()
+                    def containerID = sh(script: "docker ps -q --filter ancestor=snaket2628/node1-app:latest", returnStdout: true).trim()
                     if (containerID != "") {
                         sh "docker stop ${containerID}"
                         sh "docker rm ${containerID}"
@@ -22,7 +22,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 // Deploy the Todo app
-                sh 'docker run -d -p 8000:8000 --name todo-app snaket2628/todo:latest'
+                sh 'docker run -d -p 8000:8000 --name todo-app snaket2628/node1-app:latest'
             }
         }
         stage('Approval for testing') {
