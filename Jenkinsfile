@@ -29,7 +29,8 @@ pipeline {
             steps {
                 // Test the deployed application
                 script {
-                    echo "running tests"
+                    sh 'docker ps | grep todo-app'
+                    input message: 'Is the application working as expected?', ok: 'Confirm' // Prompt human acceptance
                     echo "everything running fine"
                 }
             }
