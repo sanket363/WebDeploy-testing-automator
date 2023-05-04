@@ -25,13 +25,28 @@ pipeline {
                 sh 'docker run -d -p 8000:8000 --name todo-app snaket2628/todo:latest'
             }
         }
+        stage('Approval for testing') {
+            steps {
+                // Test the deployed application
+                script {
+                    input message: 'Can go ahead for testing?', ok: 'Confirm' // Prompt human acceptance
+                }
+            }
+        }
         stage('Testing') {
             steps {
                 // Test the deployed application
                 script {
                     sh 'docker ps | grep todo-app'
-                    input message: 'Is the application working as expected?', ok: 'Confirm' // Prompt human acceptance
                     echo "everything running fine"
+                }
+            }
+        }
+        stage('Accepting') {
+            steps {
+                // Test the deployed application
+                script {
+                    input message: 'Is the application working as expected?', ok: 'Confirm' // Prompt human acceptance
                 }
             }
         }
