@@ -19,18 +19,18 @@ pipeline {
                 }
             }
         }
+        stage('Approval') {
+            steps {
+                // Test the deployed application
+                script {
+                    input message: 'Is image pulled correctly?', ok: 'Confirm' // Prompt human acceptance
+                }
+            }
+        }
         stage('Deploy') {
             steps {
                 // Deploy the Todo app
                 sh 'docker run -d -p 8000:8000 --name todo-app snaket2628/node1-app:latest'
-            }
-        }
-        stage('Approval for testing') {
-            steps {
-                // Test the deployed application
-                script {
-                    input message: 'Can go ahead for testing?', ok: 'Confirm' // Prompt human acceptance
-                }
             }
         }
         stage('Testing') {
@@ -38,6 +38,7 @@ pipeline {
                 // Test the deployed application
                 script {
                     sh 'docker ps | grep todo-app'
+                    sh 'docker exec todo-app npm test'
                     echo "everything running fine"
                 }
             }
